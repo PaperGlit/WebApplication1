@@ -25,5 +25,5 @@ jobs:
           file: WebApplication1/Dockerfile
           push: true
           tags: |
-            vladyslavlazar/ris-webapplication1:latest
-            vladyslavlazar/ris-webapplication1:${{ github.sha }}
+            vladyslavlazar/webapplication1:latest
+            vladyslavlazar/webapplication1:${{ github.sha }}
