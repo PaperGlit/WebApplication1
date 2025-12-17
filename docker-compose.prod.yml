@@ -1,0 +1,34 @@
+services:
+  webapplication1:
+    image: vladyslavlazar/webapplication1:${APP_TAG:-latest}
+    container_name: webapplication1
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      - DD_SERVICE=webapplication1
+      - DD_ENV=prod
+      - DD_VERSION=${APP_TAG:-latest}
+      - DD_AGENT_HOST=datadog-agent
+      - DD_LOGS_INJECTION=true
+      - DD_RUNTIME_METRICS_ENABLED=true
+    depends_on:
+      - datadog-agent
+
+  datadog-agent:
+    image: gcr.io/datadoghq/agent:latest
+    container_name: datadog-agent
+    environment:
+      - DD_HOSTNAME=datadog-agent
+      - DD_API_KEY=${DD_API_KEY}
+      - DD_APM_ENABLED=true
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+      - DD_CONTAINER_EXCLUDE=image:gcr.io/datadoghq/agent
+    ports:
+      - "8126:8126"
+      - "8125:8125/udp"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc:/host/proc:ro
+      - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
